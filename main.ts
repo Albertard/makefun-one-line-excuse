@@ -20,10 +20,12 @@ const outPath = join(outDir, "entry.txt");
 // The gate takes 1-160 Unicode code points, and not only white space.
 // Check the text before writing it: a file outside the gate never
 // reaches the judge, so fail loudly here instead.
+// Array.from counts Unicode code points, not UTF-16 code units, so a
+// character outside the Basic Multilingual Plane counts as one.
 function checkFitsGate(candidate: string): void {
-  const size = Array.from(candidate).length;
-  if (size < 1 || size > 160) {
-    throw new Error(`entry is ${size} characters, outside the 1-160 gate`);
+  const codePointCount = Array.from(candidate).length;
+  if (codePointCount < 1 || codePointCount > 160) {
+    throw new Error(`entry is ${codePointCount} characters, outside the 1-160 gate`);
   }
   if (candidate.trim() === "") {
     throw new Error("entry holds only white space");
